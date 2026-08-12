@@ -1178,7 +1178,13 @@
   </style>
 <!-- Ads -->
 <script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4143839749025019"></script>
-</link></head>
+</link><style>
+.hero-video { display:block; max-width:100%; }
+@media (max-width: 768px) {
+  .hero-video { width:100%; height:auto; max-height:none; object-fit:cover; }
+}
+</style>
+</head>
 <body>
 <!-- Header -->
 <header class="header">
@@ -1230,10 +1236,39 @@
 </header>
 <!-- Hero Section -->
 <section class="hero">
-<video class="hero-banner hero-video" autoplay muted loop playsinline preload="metadata" controls poster="https://i.ibb.co/LBKP4bC/nbanner1.jpg">
-  <source src="1000240403.mp4" type="video/mp4">
+<video id="socialHeroVideo" class="hero-banner hero-video" muted loop playsinline preload="none" controls poster="https://i.ibb.co/LBKP4bC/nbanner1.jpg" style="display:none;width:100%;height:auto;object-fit:cover;">
   Your browser does not support the video tag.
 </video>
+<script>
+(function () {
+  var video = document.getElementById('socialHeroVideo');
+  if (!video) return;
+
+  var ua = navigator.userAgent || '';
+  var ref = document.referrer || '';
+  var isTikTok = /TikTok|musical_ly/i.test(ua) || /tiktok\.com/i.test(ref);
+  var isInstagram = /Instagram/i.test(ua) || /instagram\.com|l\.instagram\.com/i.test(ref);
+  var isSocialApp = isTikTok || isInstagram;
+
+  if (!isSocialApp) {
+    video.remove();
+    return;
+  }
+
+  video.style.display = 'block';
+  video.innerHTML = '<source src="1000240403.mp4" type="video/mp4">';
+  video.load();
+
+  var playVideo = function () {
+    video.play().catch(function () {
+      // Some in-app browsers block autoplay; the controls remain available.
+    });
+  };
+
+  video.addEventListener('loadeddata', playVideo, { once: true });
+  setTimeout(playVideo, 300);
+})();
+</script>
 <div class="hero-buttons">
 <a class="btn btn-primary btn-lg" href="#featured-games">
 <i class="fas fa-gamepad"></i> Explore
