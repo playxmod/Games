@@ -1,159 +1,98 @@
-<!-- START: Read-only instruction overlay (Arabic) -->
+<!-- START: Guided arrow demo (toolbar -> menu -> Open in browser) -->
 <style>
 /* Overlay */
-.oib_readonly {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.62);
-  backdrop-filter: blur(5px) brightness(0.9);
-  z-index: 999999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-  -webkit-tap-highlight-color: transparent;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+.oib_seq_overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.62);backdrop-filter:blur(5px);z-index:999999;
+  display:none;align-items:center;justify-content:center;padding:18px;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 }
 
-/* inner */
-.oib_box {
-  width: min(94%, 820px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
+/* Wrapper */
+.oib_seq_box{width:min(92%,820px);display:flex;flex-direction:column;align-items:center;gap:14px;}
+
+/* Mock toolbar (image 1) */
+.oib_toolbar{
+  width:min(420px,86%);background:#fff;border-radius:12px;box-shadow:0 22px 50px rgba(0,0,0,.45);
+  position:relative;overflow:hidden;border:1px solid rgba(0,0,0,0.06);
+}
+.oib_toolbar_bar{height:48px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fafafa;font-weight:700;color:#111}
+.oib_toolbar_bar .left{display:flex;gap:8px;align-items:center}
+.oib_toolbar_bar .right{display:flex;align-items:center}
+.oib_toolbar_bar .dots{font-size:22px;padding:6px;border-radius:8px}
+
+/* Mock menu (image 2) */
+.oib_menu_mock{
+  width:min(420px,86%);background:#fff;border-radius:14px;box-shadow:0 22px 60px rgba(0,0,0,.5);
+  position:relative;border:1px solid rgba(0,0,0,0.06);display:none;
+}
+.oib_menu_list{padding:10px 6px}
+.oib_menu_item{padding:14px 16px;font-weight:700;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;align-items:center;gap:12px}
+.oib_menu_item:last-child{border-bottom:0}
+.oib_menu_item .icon{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:transparent}
+
+/* Instruction card */
+.oib_text{
+  max-width:760px;background:#fff;padding:16px 18px;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.32);
+  text-align:center;font-weight:800;font-size:18px;color:#0b1220;line-height:1.25;
 }
 
-/* mock toolbar */
-.oib_browser {
-  width: min(420px, 86%);
-  border-radius:14px;
-  background: linear-gradient(#fff,#f7f8fb);
-  box-shadow: 0 24px 48px rgba(0,0,0,0.45);
-  position: relative;
-  overflow: visible;
-  border: 1px solid rgba(0,0,0,0.06);
-}
-.oib_toolbar {
-  height:46px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 10px;
-  background:#f6f7f9;
-  color:#111;
-  font-weight:700;
-}
-.oib_toolbar .left { display:flex; gap:8px; align-items:center; }
-.oib_toolbar .right { display:flex; gap:8px; align-items:center; }
-.oib_toolbar .dots {
-  font-size:22px;
-  padding:6px;
-  border-radius:8px;
-  background:transparent;
-  user-select:none;
-}
+/* Secure badge */
+.oib_secure{margin-top:10px;display:inline-flex;align-items:center;gap:10px;background:rgba(6,176,90,0.12);color:#056d3a;padding:8px 14px;border-radius:28px;font-weight:700}
 
-/* content area */
-.oib_content {
-  height:150px;
-  background: linear-gradient(180deg,#fff,#f0f4fb);
+/* Red arrow - single element moved between states */
+.oib_arrow{
+  position:absolute;width:92px;height:92px;pointer-events:none;right:26px;top:-26px;transform:rotate(8deg);filter:drop-shadow(0 10px 18px rgba(0,0,0,.28));
+  transition: all 700ms cubic-bezier(.2,.9,.2,1);
 }
+.oib_arrow svg{width:100%;height:100%}
+.oib_arrow.bob{animation: bob 1.3s ease-in-out infinite}
+@keyframes bob{0%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-10px) rotate(8deg)}100%{transform:translateY(0) rotate(8deg)}}
 
-/* red arrow (absolute) */
-.oib_arrow {
-  position:absolute;
-  right:18px;
-  top:-24px;
-  width:96px;
-  height:96px;
-  pointer-events:none;
-  transform: rotate(8deg);
-  animation: oib_arrow_bob 1.3s ease-in-out infinite;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.28));
-}
-@keyframes oib_arrow_bob {
-  0% { transform: translateY(0) rotate(8deg); }
-  50% { transform: translateY(-10px) rotate(8deg); }
-  100% { transform: translateY(0) rotate(8deg); }
-}
+/* states: arrow moves to menu item (lower) */
+.oib_state_menu .oib_arrow{ top: 70px; right: 34px; transform: rotate(4deg) }
 
-/* instruction card */
-.oib_text {
-  max-width: 760px;
-  background: #fff;
-  padding: 18px 20px;
-  border-radius: 12px;
-  box-shadow: 0 18px 36px rgba(0,0,0,0.28);
-  text-align: center;
-  font-weight:800;
-  font-size:18px;
-  color:#0a1220;
-  line-height:1.25;
-}
+/* hide / show animations */
+.fade-out{opacity:0;transform:scale(.98);transition:all 400ms ease}
+.fade-in{opacity:1;transform:none;transition:all 400ms ease}
 
-/* secure badge */
-.oib_secure {
-  margin-top:10px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  background: rgba(6,176,90,0.12);
-  color:#056d3a;
-  padding:8px 14px;
-  border-radius:28px;
-  font-weight:700;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-}
-
-/* close small button (optional) */
-.oib_close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  border-radius: 8px;
-  padding:6px 8px;
-  cursor:pointer;
-  font-weight:700;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
-
-/* responsiveness */
-@media (max-width:420px){
-  .oib_text { font-size:16px; padding:14px; }
-  .oib_arrow { width:72px; height:72px; top:-18px; right:12px; }
-}
+/* close button */
+.oib_close_btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.9);border:0;border-radius:8px;padding:6px 8px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.12);font-weight:700}
+@media(max-width:420px){.oib_arrow{width:72px;height:72px;right:18px;top:-18px}.oib_text{font-size:16px;padding:14px}}
 </style>
 
-<div id="oib_readonly" class="oib_readonly" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="oib_box" role="document">
-    <div class="oib_browser" aria-hidden="true">
-      <button class="oib_close" id="oib_readonly_close" aria-label="Close" title="Close">×</button>
-
-      <div class="oib_toolbar">
-        <div class="left"><span style="font-size:20px">←</span><span style="font-size:16px">×</span></div>
-        <div class="right"><div class="dots" aria-hidden="true">⋯</div></div>
+<div id="oib_seq_overlay" class="oib_seq_overlay" role="dialog" aria-hidden="true">
+  <div class="oib_seq_box">
+    <!-- toolbar (image 1) -->
+    <div id="oib_toolbar" class="oib_toolbar fade-in" aria-hidden="true">
+      <button class="oib_close_btn" id="oib_seq_close" aria-label="Close">×</button>
+      <div class="oib_toolbar_bar">
+        <div class="left"><span style="font-size:20px">←</span><span style="font-size:15px">×</span></div>
+        <div class="right"><div class="dots" id="mock_dots" aria-hidden="true">⋯</div></div>
       </div>
+      <div style="height:120px;background:linear-gradient(#fff,#f6f8fb)"></div>
 
-      <div class="oib_content"></div>
-
-      <!-- arrow SVG -->
-      <svg class="oib_arrow" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M8 56 L38 30 L46 22 L58 14" stroke="#ff3b30" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M56 12 L62 12 L62 18" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
-      </svg>
+      <!-- arrow -->
+      <div id="oib_arrow" class="oib_arrow bob" aria-hidden="true">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 56 L38 30 L46 22 L58 14" stroke="#ff3b30" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M56 12 L62 12 L62 18" stroke="#ff3b30" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
     </div>
 
-    <div class="oib_text" id="oib_readonly_text">
-      اضغط الثلاث نقاط (⋯) في أعلى يمين تطبيق TikTok ثم اختر "Open in browser" أو "فتح في المتصفح" لعرض الصفحة كاملةً والتمكن من التحميل.
+    <!-- menu (image 2) -->
+    <div id="oib_menu" class="oib_menu_mock" aria-hidden="true">
+      <div style="height:12px"></div>
+      <div class="oib_menu_list">
+        <div class="oib_menu_item" id="menu_report"><span class="icon">⚑</span>Report</div>
+        <div class="oib_menu_item" id="menu_open"><span class="icon">🔗</span>Open in browser</div>
+        <div class="oib_menu_item" id="menu_copy"><span class="icon">🔁</span>Copy link</div>
+      </div>
+    </div>
+
+    <div class="oib_text" id="oib_seq_text">
+      اضغط على الثلاث نقاط (⋯) في أعلى اليمين ثم اختر "Open in browser" لفتح الصفحة في المتصفح وتحميل الملفات.
       <div class="oib_secure" aria-hidden="true" style="margin-top:12px">
-        <!-- simple check icon -->
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2l7 3v5c0 5-3 9-7 11-4-2-7-6-7-11V5l7-3z" fill="#06c26c"/>
-          <path d="M9.5 12.5l1.8 1.8L15 10" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l7 3v5c0 5-3 9-7 11-4-2-7-6-7-11V5l7-3z" fill="#06c26c"/><path d="M9.5 12.5l1.8 1.8L15 10" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Secure • Verified by Play Protect
       </div>
     </div>
@@ -162,7 +101,7 @@
 
 <script>
 (function(){
-  // helper: force show for testing with ?show_oib=1
+  // helper to force display for testing: ?show_oib=1
   function qsBool(name){ var m = location.search.match(new RegExp('[?&]'+name+'=(1|true)')); return !!m; }
 
   var ua = navigator.userAgent || navigator.vendor || window.opera || '';
@@ -170,40 +109,116 @@
   var isInstagram = /instagram|fb_iab|instagram_for/i.test(ua);
   var forced = qsBool('show_oib') || qsBool('oib');
 
-  // Show only in TikTok/Instagram webviews unless forced
   if (!isTikTok && !isInstagram && !forced) return;
 
   document.addEventListener('DOMContentLoaded', function(){
-    var overlay = document.getElementById('oib_readonly');
-    var close = document.getElementById('oib_readonly_close');
-    if (!overlay) return;
+    var overlay = document.getElementById('oib_seq_overlay');
+    var toolbar = document.getElementById('oib_toolbar');
+    var menu = document.getElementById('oib_menu');
+    var arrow = document.getElementById('oib_arrow');
+    var closeBtn = document.getElementById('oib_seq_close');
+    var menu_open_item = document.getElementById('menu_open');
 
-    // show overlay automatically
-    setTimeout(function(){
-      overlay.style.display = 'flex';
-      overlay.setAttribute('aria-hidden','false');
-    }, 80);
+    // show overlay
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden','false');
 
-    // close handler (optional; visitor can close)
-    if (close) {
-      close.addEventListener('click', function(e){
-        e.stopPropagation();
-        overlay.style.display = 'none';
-        overlay.setAttribute('aria-hidden','true');
-      });
+    // sequence timings (ms)
+    var tShow = 300;      // initial delay before showing arrow move
+    var tToDots = 1200;   // arrow moving to dots
+    var tSwitch = 1800;   // time after reaching dots to switch images
+    var tToOpen = 2200;   // time to move to "Open in browser" item
+    var repeatDelay = 4500; // optional loop delay
+
+    // ensure initial visibility states
+    toolbar.style.display = 'block';
+    toolbar.classList.remove('fade-out'); toolbar.classList.add('fade-in');
+    menu.style.display = 'none';
+    menu.classList.remove('fade-in');
+
+    // function to move arrow to the dots (we use class transform by changing top/right)
+    function moveToDots(){
+      // arrow is already positioned over toolbar by default; add bobbing
+      arrow.classList.add('bob');
+      // ensure state is toolbar
+      overlay.classList.remove('oib_state_menu');
     }
 
-    // also allow closing by tapping outside the box
-    overlay.addEventListener('click', function(e){
-      if (e.target === overlay) {
-        overlay.style.display = 'none';
-        overlay.setAttribute('aria-hidden','true');
+    // function to switch to menu mock and move arrow down to Open in browser
+    function switchToMenuAndPointOpen(){
+      // fade out toolbar
+      toolbar.classList.remove('fade-in'); toolbar.classList.add('fade-out');
+      // hide after animation
+      setTimeout(function(){ toolbar.style.display = 'none'; }, 420);
+
+      // show menu
+      menu.style.display = 'block';
+      menu.classList.add('fade-in');
+
+      // shift overlay state so CSS moves arrow
+      overlay.classList.add('oib_state_menu');
+
+      // remove bob and let arrow rest (or keep bob)
+      // arrow.classList.remove('bob');
+    }
+
+    // start sequence (first step: move arrow slightly towards dots)
+    setTimeout(function(){
+      moveToDots();
+    }, tShow);
+
+    // after tToDots (simulate arrow pointing on dots)
+    setTimeout(function(){
+      // optionally highlight dots (visual effect)
+      var dots = document.getElementById('mock_dots');
+      if (dots) {
+        dots.style.background = '#f0f5ff';
+        dots.style.borderRadius = '8px';
       }
+    }, tToDots);
+
+    // switch toolbar -> menu
+    setTimeout(function(){
+      switchToMenuAndPointOpen();
+    }, tSwitch);
+
+    // after switching, optionally highlight the "Open in browser" menu item
+    setTimeout(function(){
+      if (menu_open_item) {
+        menu_open_item.style.background = '#f2f6fb';
+        menu_open_item.style.borderRadius = '8px';
+      }
+    }, tToOpen);
+
+    // optional: repeat sequence every few seconds (comment out if you want run-once)
+    var repeat = false; // set true to loop
+    if (repeat) {
+      setInterval(function(){
+        // reset states
+        if (!toolbar || !menu) return;
+        menu.style.display = 'none';
+        toolbar.style.display = 'block';
+        toolbar.classList.remove('fade-out'); toolbar.classList.add('fade-in');
+        menu_open_item && (menu_open_item.style.background = '');
+        overlay.classList.remove('oib_state_menu');
+        // re-run animation steps
+        setTimeout(function(){ moveToDots(); }, 300);
+        setTimeout(function(){ switchToMenuAndPointOpen(); }, 1800);
+        setTimeout(function(){ if (menu_open_item) menu_open_item.style.background = '#f2f6fb'; }, 2200);
+      }, repeatDelay + tToOpen);
+    }
+
+    // close
+    if (closeBtn) closeBtn.addEventListener('click', function(e){ e.stopPropagation(); overlay.style.display='none'; overlay.setAttribute('aria-hidden','true'); });
+
+    // close by tapping outside
+    overlay.addEventListener('click', function(e){
+      if (e.target === overlay) { overlay.style.display='none'; overlay.setAttribute('aria-hidden','true'); }
     });
 
-    // prevent background scrolling on touch devices while overlay visible
+    // prevent background scroll
     overlay.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
   });
 })();
 </script>
-<!-- END: Read-only instruction overlay -->
+<!-- END: Guided arrow demo -->
